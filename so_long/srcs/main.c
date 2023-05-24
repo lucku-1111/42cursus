@@ -3,19 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seoklee <seoklee@student.42.kr>            +#+  +:+       +#+        */
+/*   By: seoklee <seoklee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 21:06:58 by seoklee           #+#    #+#             */
-/*   Updated: 2023/05/21 22:07:01 by seoklee          ###   ########.fr       */
+/*   Updated: 2023/05/24 18:08:47 by seoklee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include	"so_long.h"
+#include "so_long.h"
+
+// void runleaks(void)
+// {
+// 	system("leaks -q so_long");
+// }
 
 int	main(int argc, char **argv)
 {
 	t_game	game;
 
+	// atexit(runleaks);
 	check_arg(argc, argv[1]);
 	init_game(&game);
 	read_map(&game, argv[1]);

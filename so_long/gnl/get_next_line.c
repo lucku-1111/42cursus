@@ -6,7 +6,7 @@
 /*   By: seoklee <seoklee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 11:27:41 by seoklee           #+#    #+#             */
-/*   Updated: 2023/05/23 19:48:53 by seoklee          ###   ########.fr       */
+/*   Updated: 2023/05/24 17:51:01 by seoklee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,11 @@ char	*ft_line(char *tail, int *n)
 
 char	*ft_tail(char *tail, int *n)
 {
-	tail = ft_substr(tail, *n, ft_strlen(tail) - *n);
+	char	*str;
+
+	str = tail;
+	tail = ft_substr(str, *n, ft_strlen(tail) - *n);
+	free(str);
 	return (tail);
 }
 

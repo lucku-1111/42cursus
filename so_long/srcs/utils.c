@@ -6,7 +6,7 @@
 /*   By: seoklee <seoklee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 21:48:58 by seoklee           #+#    #+#             */
-/*   Updated: 2023/05/24 14:18:05 by seoklee          ###   ########.fr       */
+/*   Updated: 2023/05/24 18:21:05 by seoklee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,10 @@ void	player_location(t_game *game, int x, int y)
 void	exit_free(char *err_msg, char **map, int y_len)
 {
 	int	i;
-
+	(void) y_len;
+	
 	i = 0;
+	// while (map[i] != NULL)
 	while (i < y_len + 1)
 		free(map[i++]);
 	free(map);
