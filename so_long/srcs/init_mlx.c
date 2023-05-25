@@ -6,7 +6,7 @@
 /*   By: seoklee <seoklee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 17:49:43 by seoklee           #+#    #+#             */
-/*   Updated: 2023/05/24 20:04:18 by seoklee          ###   ########.fr       */
+/*   Updated: 2023/05/25 17:04:55 by seoklee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,11 @@ void	load_img(t_game *game, char *file, t_img *img_name)
 
 void	init_img(t_game *game)
 {
-	load_img(game, "./images/collect.xpm", &game->collect);
-	load_img(game, "./images/exit.xpm", &game->exit);
-	load_img(game, "./images/player.xpm", &game->player);
-	load_img(game, "./images/tile.xpm", &game->tile);
-	load_img(game, "./images/tree.xpm", &game->tree);
+	load_img(game, "./textures/collect.xpm", &game->collect);
+	load_img(game, "./textures/exit.xpm", &game->exit);
+	load_img(game, "./textures/player.xpm", &game->player);
+	load_img(game, "./textures/tile.xpm", &game->tile);
+	load_img(game, "./textures/tree.xpm", &game->tree);
 }
 
 void	init_mlx(t_game *game)

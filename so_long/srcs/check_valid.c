@@ -6,7 +6,7 @@
 /*   By: seoklee <seoklee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/21 21:03:27 by seoklee           #+#    #+#             */
-/*   Updated: 2023/05/24 19:59:28 by seoklee          ###   ########.fr       */
+/*   Updated: 2023/05/25 17:27:49 by seoklee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,10 @@ void	init_info(t_game *game, t_valid *info)
 	while (i < game->y_len)
 	{
 		info->visited[i] = ft_strdup(game->map[i]);
-		if (info->visited[i] == 0)
+		if (info->visited[i] == NULL)
 			exit_err("Malloc fail.\n");
 		i++;
 	}
-	info->visited[i] = 0;
 }
 
 void	check_path(t_valid *info, int x, int y)
