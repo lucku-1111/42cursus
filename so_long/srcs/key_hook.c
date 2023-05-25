@@ -6,7 +6,7 @@
 /*   By: seoklee <seoklee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 18:47:08 by seoklee           #+#    #+#             */
-/*   Updated: 2023/05/23 11:33:37 by seoklee          ###   ########.fr       */
+/*   Updated: 2023/05/24 20:00:06 by seoklee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	close_game(t_game *game)
 
 	i = 0;
 	mlx_destroy_window(game->mlx, game->win);
-	while (i < game->y_len + 1)
+	while (i < game->y_len)
 		free(game->map[i++]);
 	free(game->map);
 	exit(0);

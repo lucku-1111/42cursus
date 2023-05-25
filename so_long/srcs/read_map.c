@@ -6,7 +6,7 @@
 /*   By: seoklee <seoklee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/18 18:31:23 by seoklee           #+#    #+#             */
-/*   Updated: 2023/05/24 18:25:19 by seoklee          ###   ########.fr       */
+/*   Updated: 2023/05/24 20:08:36 by seoklee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,10 @@ void	alloc_map(t_game *game)
 	int	i;
 
 	i = 0;
-	game->map = (char **)ft_calloc(game->y_len + 1, sizeof(char *));
+	game->map = (char **)ft_calloc(game->y_len, sizeof(char *));
 	if (game->map == NULL)
 		exit_err("Malloc fail.\n");
-	while (i < game->y_len + 1)
+	while (i < game->y_len)
 	{
 		game->map[i] = (char *)ft_calloc(game->x_len + 1, sizeof(char));
 		if (game->map[i] == NULL)
@@ -75,7 +75,6 @@ void	parse_map(t_game *game, int fd)
 		free(line);
 		line = get_next_line(fd);
 	}
-	game->map[i][0] = '\0';
 	free(line);
 }
 
@@ -87,10 +86,10 @@ void	read_map(t_game *game, char *map_file)
 	if (fd < 0)
 		exit_err("Open Fail.\n");
 	map_size(game, fd);
+	close(fd);
 	if (game->x_len > 128)
 		exit_err("The map is too long.\n");
 	alloc_map(game);
-	close(fd);
 	fd = open(map_file, O_RDONLY);
 	if (fd < 0)
 		exit_free("Open Fail.\n", game->map, game->y_len);

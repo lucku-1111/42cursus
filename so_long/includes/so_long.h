@@ -6,7 +6,7 @@
 /*   By: seoklee <seoklee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 21:13:23 by seoklee           #+#    #+#             */
-/*   Updated: 2023/05/24 14:19:50 by seoklee          ###   ########.fr       */
+/*   Updated: 2023/05/24 20:03:39 by seoklee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void	init_info(t_game *game, t_valid *info);
 void	check_path(t_valid *info, int x, int y);
 void	init_mlx(t_game *game);
 void	init_img(t_game *game);
-void	load_img(void *mlx, char *file, t_img *img_name);
+void	load_img(t_game *game, char *file, t_img *img_name);
 void	map_to_win(t_game *game);
 void	put_img_to_win(t_game *game, int i, int j);
 int		key_hook(int keycode, t_game *game);

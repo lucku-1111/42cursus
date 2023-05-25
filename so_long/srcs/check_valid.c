@@ -6,7 +6,7 @@
 /*   By: seoklee <seoklee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/21 21:03:27 by seoklee           #+#    #+#             */
-/*   Updated: 2023/05/24 14:24:50 by seoklee          ###   ########.fr       */
+/*   Updated: 2023/05/24 19:59:28 by seoklee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	init_info(t_game *game, t_valid *info)
 	i = 0;
 	info->count = game->c_cnt;
 	info->exit = 0;
-	info->visited = (char **)ft_calloc(game->y_len + 1, sizeof(char *));
+	info->visited = (char **)ft_calloc(game->y_len, sizeof(char *));
 	if (info->visited == NULL)
 		exit_err("Malloc fail.\n");
 	while (i < game->y_len)
@@ -57,14 +57,14 @@ void	check_valid(t_game *game)
 	check_path(&info, game->player_x, game->player_y);
 	if (info.count != 0 || info.exit == 0)
 	{
-		while (i < game->y_len + 1)
+		while (i < game->y_len)
 			free(info.visited[i++]);
 		free(info.visited);
 		exit_free("The map needs a valid path.\n", game->map, game->y_len);
 	}
 	else
 	{
-		while (i < game->y_len + 1)
+		while (i < game->y_len)
 			free(info.visited[i++]);
 		free(info.visited);
 	}
