@@ -6,7 +6,7 @@
 /*   By: seoklee <seoklee@student.42.kr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 00:10:22 by seoklee           #+#    #+#             */
-/*   Updated: 2023/05/29 03:24:21 by seoklee          ###   ########.fr       */
+/*   Updated: 2023/05/29 20:04:52 by seoklee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ int	init_info(t_info *info, int ac, char **av)
 	info->someone_died = 0;
 	info->fork = init_fork(info->num);
 	info->philo = init_philo(info);
+	pthread_mutex_init(&info->finish_check, NULL);
 	if (!info->fork || !info->philo)
 		return (0);
 	return (1);

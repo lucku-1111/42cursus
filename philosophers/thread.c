@@ -6,7 +6,7 @@
 /*   By: seoklee <seoklee@student.42.kr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 12:14:43 by seoklee           #+#    #+#             */
-/*   Updated: 2023/05/29 09:55:11 by seoklee          ###   ########.fr       */
+/*   Updated: 2023/05/29 22:28:16 by seoklee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,18 @@ void	*routine(void *arg)
 	info = philo->info;
 	if (philo->id % 2 == 0)
 		usleep(500);
-	else
-		usleep(400);
-	while (info->finish_eat != info->num && info->someone_died == 0)
+	while (1)
 	{
+		pthread_mutex_lock(&(info->finish_check));
+		if (info->finish_eat == info->num || info->someone_died == 1)
+		{
+			pthread_mutex_unlock(&(info->finish_check));
+			break ;
+		}
+		pthread_mutex_unlock(&(info->finish_check));
 		philo_eat(philo, info);
+		if (info->num == 1)
+			break ;
 		if (philo->eat == 1 && philo->eat_count == info->must_eat)
 			info->finish_eat++;
 		if (philo->eat == 1)
@@ -53,7 +60,6 @@ void	*routine(void *arg)
 			print_msg(*info, philo->id, "is thinking");
 			philo->eat = 0;
 		}
-		usleep(1000);
 	}
 	return (0);
 }
@@ -66,6 +72,7 @@ void	is_finish(t_info *info)
 	philo = info->philo;
 	while (1)
 	{
+		pthread_mutex_lock(&(info->finish_check));
 		if (info->finish_eat == info->num || info->someone_died != 0)
 			break ;
 		i = 0;
@@ -79,8 +86,10 @@ void	is_finish(t_info *info)
 			}
 			i++;
 		}
-		usleep(10);
+		pthread_mutex_unlock(&(info->finish_check));
+		usleep(500);
 	}
+	pthread_mutex_unlock(&(info->finish_check));
 }
 
 void	free_info(t_info *info)
@@ -93,6 +102,7 @@ void	free_info(t_info *info)
 		pthread_mutex_destroy(&info->fork[i]);
 		i++;
 	}
+	pthread_mutex_destroy(&info->finish_check);
 	free(info->fork);
 	free(info->philo);
 }

@@ -6,7 +6,7 @@
 /*   By: seoklee <seoklee@student.42.kr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/27 18:17:08 by seoklee           #+#    #+#             */
-/*   Updated: 2023/05/29 00:13:30 by seoklee          ###   ########.fr       */
+/*   Updated: 2023/05/29 20:03:58 by seoklee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ typedef struct s_info
 	int				someone_died;
 	t_philo			*philo;
 	pthread_mutex_t	*fork;
+	pthread_mutex_t finish_check;
 }	t_info;
 
 int	print_err(char *err_msg);

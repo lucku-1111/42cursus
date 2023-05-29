@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seoklee <seoklee@student.42.fr>            +#+  +:+       +#+        */
+/*   By: seoklee <seoklee@student.42.kr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 11:27:41 by seoklee           #+#    #+#             */
-/*   Updated: 2023/05/23 13:42:33 by seoklee          ###   ########.fr       */
+/*   Updated: 2023/05/30 02:58:58 by seoklee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ int	ft_strlen(char *str)
 {
 	int	i;
 
+	if (str == NULL)
+		return (0);
 	i = 0;
 	while (str[i])
 		i++;
@@ -106,10 +108,11 @@ char	*ft_line(char *tail, int *n)
 
 char	*ft_tail(char *tail, int *n)
 {
-	int	i;
+	char	*str;
 
-	i = ft_strlen(tail) - *n + 1;
-	tail = ft_substr(tail, *n, i);
+	str = tail;
+	tail = ft_substr(str, *n, ft_strlen(tail) - *n);
+	free(str);
 	return (tail);
 }
 
@@ -124,7 +127,7 @@ char	*ft_read(char *tail, int fd)
 		count = read(fd, buf, BUFFER_SIZE);
 		if (count < 0)
 			return (NULL);
-		buf[BUFFER_SIZE] = '\0';
+		buf[count] = '\0';
 		if (tail != 0)
 			tail = ft_strjoin(tail, buf);
 		else
