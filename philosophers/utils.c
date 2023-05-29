@@ -6,15 +6,16 @@
 /*   By: seoklee <seoklee@student.42.kr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 00:04:43 by seoklee           #+#    #+#             */
-/*   Updated: 2023/05/28 20:15:35 by seoklee          ###   ########.fr       */
+/*   Updated: 2023/05/29 03:31:00 by seoklee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	print_msg(long long time, int id, char *msg)
+void	print_msg(t_info info, int id, char *msg)
 {
-	printf("%lld %d %s\n", time, id, msg);
+	if (info.finish_eat != info.num && info.someone_died == 0)
+		printf("%lld %d %s\n", get_time() - info.start_t, id, msg);
 }
 
 int	print_err(char *err_msg)
@@ -44,6 +45,8 @@ int	ft_atoi(const char *str)
 		result = result * 10 + *str - '0';
 		str++;
 	}
+	if (*str != '\0')
+		return (-1);
 	return ((long long)result * sign);
 }
 
