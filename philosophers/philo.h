@@ -6,7 +6,7 @@
 /*   By: seoklee <seoklee@student.42.kr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/27 18:17:08 by seoklee           #+#    #+#             */
-/*   Updated: 2023/05/29 20:03:58 by seoklee          ###   ########.fr       */
+/*   Updated: 2023/06/01 03:50:29 by seoklee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,15 +47,21 @@ typedef struct s_info
 	pthread_mutex_t finish_check;
 }	t_info;
 
-int	print_err(char *err_msg);
-int	ft_atoi(const char *str);
-int	init_info(t_info *info, int ac, char **av);
+int				init_info(t_info *info, int ac, char **av);
+t_philo			*init_philo(t_info *info);
 pthread_mutex_t	*init_fork(int num);
-t_philo	*init_philo(t_info *info);
-long long	get_time(void);
-int	ft_threads(t_info *info);
-void	*routine(void *arg);
-void	spend_time(long long time);
-void	print_msg(t_info info, int id, char *msg);
+
+int				ft_threads(t_info *info);
+void			*routine(void *arg);
+
+void			free_info(t_info *info);
+int				philo_eat(t_philo *philo, t_info *info);
+int				philo_sleep(t_philo *philo, t_info *info);
+
+void			print_msg(t_info info, int id, char *msg);
+int				print_err(char *err_msg);
+int				ft_atoi(const char *str);
+long long		get_time(void);
+void			spend_time(long long time);
 
 #endif

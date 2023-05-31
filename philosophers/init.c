@@ -6,7 +6,7 @@
 /*   By: seoklee <seoklee@student.42.kr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 00:10:22 by seoklee           #+#    #+#             */
-/*   Updated: 2023/05/29 20:04:52 by seoklee          ###   ########.fr       */
+/*   Updated: 2023/05/31 21:10:56 by seoklee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,9 @@ t_philo	*init_philo(t_info *info)
 	while (i < info->num)
 	{
 		philo[i].id = i + 1;
-		philo[i].eat = 0;
 		philo[i].eat_count = 0;
-		philo[i].last_eat = 0;
+		philo[i].eat = 0;
+		philo[i].last_eat = get_time();
 		philo[i].thread = 0;
 		philo[i].l_fork = &info->fork[i];
 		philo[i].r_fork = &info->fork[(i + 1) % info->num];

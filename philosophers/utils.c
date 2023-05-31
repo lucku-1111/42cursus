@@ -6,7 +6,7 @@
 /*   By: seoklee <seoklee@student.42.kr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 00:04:43 by seoklee           #+#    #+#             */
-/*   Updated: 2023/05/29 22:28:09 by seoklee          ###   ########.fr       */
+/*   Updated: 2023/06/01 03:47:55 by seoklee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,9 @@
 
 void	print_msg(t_info info, int id, char *msg)
 {
-	if (info.finish_eat != info.num && info.someone_died == 0)
+	if (msg[0] != 'd')
+		usleep(50);
+	if (info.someone_died != 1)
 		printf("%lld %d %s\n", get_time() - info.start_t, id, msg);
 }
 
@@ -72,6 +74,6 @@ void	spend_time(long long time)
 		now = get_time();
 		if (now - start >= time)
 			break;
-		usleep(10);
+		usleep(100);
 	}
 }
