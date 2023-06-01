@@ -6,7 +6,7 @@
 /*   By: seoklee <seoklee@student.42.kr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 00:10:22 by seoklee           #+#    #+#             */
-/*   Updated: 2023/05/31 21:10:56 by seoklee          ###   ########.fr       */
+/*   Updated: 2023/06/01 21:36:47 by seoklee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,6 @@ t_philo	*init_philo(t_info *info)
 
 int	init_info(t_info *info, int ac, char **av)
 {
-	if (ac != 5 && ac != 6)
-		return (0);
 	info->num = ft_atoi(av[1]);
 	info->die_t = ft_atoi(av[2]);
 	info->eat_t = ft_atoi(av[3]);
@@ -75,8 +73,8 @@ int	init_info(t_info *info, int ac, char **av)
 	info->finish_eat = 0;
 	info->someone_died = 0;
 	info->fork = init_fork(info->num);
+	pthread_mutex_init(&(info->print), NULL);
 	info->philo = init_philo(info);
-	pthread_mutex_init(&info->finish_check, NULL);
 	if (!info->fork || !info->philo)
 		return (0);
 	return (1);

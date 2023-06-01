@@ -6,7 +6,7 @@
 /*   By: seoklee <seoklee@student.42.kr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/27 18:17:08 by seoklee           #+#    #+#             */
-/*   Updated: 2023/06/01 03:50:29 by seoklee          ###   ########.fr       */
+/*   Updated: 2023/06/01 21:45:43 by seoklee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,10 @@ typedef struct s_info
 	int				must_eat;
 	long long		start_t;
 	int				finish_eat;
-	int				someone_died;
+	long long		someone_died;
 	t_philo			*philo;
 	pthread_mutex_t	*fork;
-	pthread_mutex_t finish_check;
+	pthread_mutex_t print;
 }	t_info;
 
 int				init_info(t_info *info, int ac, char **av);
@@ -58,7 +58,7 @@ void			free_info(t_info *info);
 int				philo_eat(t_philo *philo, t_info *info);
 int				philo_sleep(t_philo *philo, t_info *info);
 
-void			print_msg(t_info info, int id, char *msg);
+int				print_msg(t_info info, int id, char *msg);
 int				print_err(char *err_msg);
 int				ft_atoi(const char *str);
 long long		get_time(void);
