@@ -6,7 +6,7 @@
 /*   By: seoklee <seoklee@student.42.kr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/27 18:17:08 by seoklee           #+#    #+#             */
-/*   Updated: 2023/06/02 23:59:47 by seoklee          ###   ########.fr       */
+/*   Updated: 2023/06/03 00:50:30 by seoklee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ typedef struct s_philo
 	int				eat_count;
 	long long		last_eat;
 	pthread_t		thread;
+	int				*l_fork_status;
+	int				*r_fork_status;
 	pthread_mutex_t	*l_fork;
 	pthread_mutex_t	*r_fork;
 	struct s_info	*info;
@@ -40,6 +42,7 @@ typedef struct s_info
 	int				must_eat;
 	long long		start_t;
 	int				finish;
+	int				*fork_status;
 	t_philo			*philo;
 	pthread_mutex_t	*fork;
 	pthread_mutex_t	print_m;
@@ -50,8 +53,8 @@ typedef struct s_info
 
 
 int				init_info(t_info *info, int ac, char **av);
-t_philo			*init_philo(t_info *info);
-pthread_mutex_t	*init_fork(int num);
+void			init_philo(t_info *info);
+void			init_fork(t_info *info);
 
 int				start_threads(t_info *info);
 void			*routine(void *arg);

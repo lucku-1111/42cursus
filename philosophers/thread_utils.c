@@ -6,7 +6,7 @@
 /*   By: seoklee <seoklee@student.42.kr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/31 17:20:01 by seoklee           #+#    #+#             */
-/*   Updated: 2023/06/03 00:00:25 by seoklee          ###   ########.fr       */
+/*   Updated: 2023/06/03 00:51:49 by seoklee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,17 @@ int	get_forks(t_philo *philo, t_info *info)
 	if (info->num == 1)
 	{
 		pthread_mutex_lock(philo->l_fork);
+		*(philo->l_fork_status) = 1;
 		print_msg(info, philo->id, "has taken a fork");
+		*(philo->l_fork_status) = 0;
 		pthread_mutex_unlock(philo->l_fork);
 		return (1);
 	}
 	pthread_mutex_lock(philo->l_fork);
+	*(philo->l_fork_status) = 1;
 	print_msg(info, philo->id, "has taken a fork");
 	pthread_mutex_lock(philo->r_fork);
+	*(philo->r_fork_status) = 1;
 	print_msg(info, philo->id, "has taken a fork");
 	return (0);
 }
@@ -32,7 +36,9 @@ int	philo_eat(t_philo *philo, t_info *info)
 {
 	if (stop(info))
 	{
+		*(philo->l_fork_status) = 0;
 		pthread_mutex_unlock(philo->l_fork);
+		*(philo->r_fork_status) = 0;
 		pthread_mutex_unlock(philo->r_fork);
 		return (1);
 	}
@@ -44,7 +50,9 @@ int	philo_eat(t_philo *philo, t_info *info)
 	philo->eat_count++;
 	pthread_mutex_unlock(&(info->eat_count_m));
 	spend_time(info->eat_t);
+	*(philo->l_fork_status) = 0;
 	pthread_mutex_unlock(philo->l_fork);
+	*(philo->r_fork_status) = 0;
 	pthread_mutex_unlock(philo->r_fork);
 	return (0);
 }
@@ -76,5 +84,6 @@ void	free_info(t_info *info)
 	pthread_mutex_destroy(&(info->last_eat_m));
 	pthread_mutex_destroy(&(info->eat_count_m));
 	free(info->fork);
+	free(info->fork_status);
 	free(info->philo);
 }
