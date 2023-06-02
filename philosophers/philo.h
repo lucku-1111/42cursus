@@ -6,7 +6,7 @@
 /*   By: seoklee <seoklee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/27 18:17:08 by seoklee           #+#    #+#             */
-/*   Updated: 2023/06/02 14:50:39 by seoklee          ###   ########.fr       */
+/*   Updated: 2023/06/02 17:55:37 by seoklee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void			free_info(t_info *info);
 int				philo_eat(t_philo *philo, t_info *info);
 int				philo_sleep(t_philo *philo, t_info *info);
 
-int				print_msg(t_info info, int id, char *msg);
+int				print_msg(t_info *info, int id, char *msg);
 int				print_err(char *err_msg);
 int				ft_atoi(const char *str);
 long long		get_time(void);

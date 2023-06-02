@@ -6,7 +6,7 @@
 /*   By: seoklee <seoklee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 12:14:43 by seoklee           #+#    #+#             */
-/*   Updated: 2023/06/02 14:49:56 by seoklee          ###   ########.fr       */
+/*   Updated: 2023/06/02 17:55:17 by seoklee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,7 @@ void	check_finish(t_info *info)
 		{
 			if (get_time() - philo[i].last_eat > info->die_t)
 			{
-				info->someone_died = 1;
-				print_msg(*info, philo[i].id, "died");
+				print_msg(info, philo[i].id, "died");
 				info->finish_eat = info->num;
 				break ;
 			}

@@ -6,19 +6,21 @@
 /*   By: seoklee <seoklee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 00:04:43 by seoklee           #+#    #+#             */
-/*   Updated: 2023/06/02 14:28:10 by seoklee          ###   ########.fr       */
+/*   Updated: 2023/06/02 17:55:08 by seoklee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	print_msg(t_info info, int id, char *msg)
+int	print_msg(t_info *info, int id, char *msg)
 {
-	pthread_mutex_lock(&(info.print));
-	if (msg[0] != 'd' && info.someone_died == 1)
+	pthread_mutex_lock(&(info->print));
+	if (msg[0] != 'd' && info->someone_died == 1)
 		return (1);
-	printf("%lld %d %s\n", get_time() - info.start_t, id, msg);
-	pthread_mutex_unlock(&(info.print));
+	else if (msg[0] == 'd')
+		info->someone_died = 1;
+	printf("%lld %d %s\n", get_time() - info->start_t, id, msg);
+	pthread_mutex_unlock(&(info->print));
 	return (0);
 }
 

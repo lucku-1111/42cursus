@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   thread_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seoklee <seoklee@student.42.kr>            +#+  +:+       +#+        */
+/*   By: seoklee <seoklee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/31 17:20:01 by seoklee           #+#    #+#             */
-/*   Updated: 2023/06/01 21:47:53 by seoklee          ###   ########.fr       */
+/*   Updated: 2023/06/02 17:55:41 by seoklee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,14 @@
 int	philo_eat(t_philo *philo, t_info *info)
 {
 	pthread_mutex_lock(philo->l_fork);
-	if (print_msg(*info, philo->id, "has taken a fork"))
+	if (print_msg(info, philo->id, "has taken a fork"))
 		return (1);
 	if (info->num > 1)
 	{
 		pthread_mutex_lock(philo->r_fork);
-		if (print_msg(*info, philo->id, "has taken a fork"))
+		if (print_msg(info, philo->id, "has taken a fork"))
 			return (1);
-		if (print_msg(*info, philo->id, "is eating"))
+		if (print_msg(info, philo->id, "is eating"))
 			return (1);
 		philo->last_eat = get_time();
 		spend_time(info->eat_t);
@@ -35,10 +35,10 @@ int	philo_eat(t_philo *philo, t_info *info)
 
 int	philo_sleep(t_philo *philo, t_info *info)
 {
-	if (print_msg(*info, philo->id, "is sleeping"))
+	if (print_msg(info, philo->id, "is sleeping"))
 		return (1);
 	spend_time(info->sleep_t);
-	if (print_msg(*info, philo->id, "is thinking"))
+	if (print_msg(info, philo->id, "is thinking"))
 		return (1);
 	return (0);
 }
