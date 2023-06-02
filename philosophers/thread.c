@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   thread.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seoklee <seoklee@student.42.fr>            +#+  +:+       +#+        */
+/*   By: seoklee <seoklee@student.42.kr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 12:14:43 by seoklee           #+#    #+#             */
-/*   Updated: 2023/06/02 17:55:17 by seoklee          ###   ########.fr       */
+/*   Updated: 2023/06/02 23:55:44 by seoklee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,28 +23,6 @@ int	end_threads(t_info *info)
 	return (0);
 }
 
-void	check_finish(t_info *info)
-{
-	t_philo	*philo;
-	int		i;
-
-	philo = info->philo;
-	while (info->finish_eat != info->num)
-	{
-		i = 0;
-		while (i < info->num)
-		{
-			if (get_time() - philo[i].last_eat > info->die_t)
-			{
-				print_msg(info, philo[i].id, "died");
-				info->finish_eat = info->num;
-				break ;
-			}
-			i++;
-		}
-	}
-}
-
 void	*routine(void *arg)
 {
 	t_philo	*philo;
@@ -54,20 +32,15 @@ void	*routine(void *arg)
 	info = philo->info;
 	if (philo->id % 2 == 0)
 		spend_time(info->eat_t * 0.9);
-	while (info->someone_died == 0)
+	while (!stop(info))
 	{
-		if (philo_eat(philo, info))
+		if (get_forks(philo, info))
 			break ;
-		if (philo->eat_count == info->must_eat)
-			info->finish_eat++;
-		if (info->num == 1)
+		if (philo_eat(philo, info))
 			break ;
 		if (philo_sleep(philo, info))
 			break ;
 	}
-	pthread_mutex_unlock(philo->l_fork);
-	pthread_mutex_unlock(philo->r_fork);
-	pthread_mutex_unlock(&(info->print));
 	return (0);
 }
 

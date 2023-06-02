@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seoklee <seoklee@student.42.fr>            +#+  +:+       +#+        */
+/*   By: seoklee <seoklee@student.42.kr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 00:10:22 by seoklee           #+#    #+#             */
-/*   Updated: 2023/06/02 14:29:18 by seoklee          ###   ########.fr       */
+/*   Updated: 2023/06/03 00:00:18 by seoklee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	init_info(t_info *info, int ac, char **av)
 	info->die_t = ft_atoi(av[2]);
 	info->eat_t = ft_atoi(av[3]);
 	info->sleep_t = ft_atoi(av[4]);
-	info->must_eat = -1;
+	info->must_eat = 0;
 	if (ac == 6)
 	{
 		info->must_eat = ft_atoi(av[5]);
@@ -67,13 +67,15 @@ int	init_info(t_info *info, int ac, char **av)
 			return (0);
 	}
 	info->start_t = get_time();
-	info->finish_eat = 0;
-	info->someone_died = 0;
+	info->finish = 0;
 	info->fork = init_fork(info->num);
 	info->philo = init_philo(info);
 	if (info->num < 1 || info->die_t <= 0 || info->eat_t < 0 \
 		|| info->sleep_t < 0 || !info->fork || !info->philo \
-		|| pthread_mutex_init(&(info->print), NULL))
+		|| pthread_mutex_init(&(info->print_m), NULL)
+		|| pthread_mutex_init(&(info->finish_m), NULL)
+		|| pthread_mutex_init(&(info->last_eat_m), NULL)
+		|| pthread_mutex_init(&(info->eat_count_m), NULL))
 		return (1);
 	return (0);
 }

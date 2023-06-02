@@ -3,43 +3,61 @@
 /*                                                        :::      ::::::::   */
 /*   thread_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seoklee <seoklee@student.42.fr>            +#+  +:+       +#+        */
+/*   By: seoklee <seoklee@student.42.kr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/31 17:20:01 by seoklee           #+#    #+#             */
-/*   Updated: 2023/06/02 17:55:41 by seoklee          ###   ########.fr       */
+/*   Updated: 2023/06/03 00:00:25 by seoklee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+int	get_forks(t_philo *philo, t_info *info)
+{
+	if (info->num == 1)
+	{
+		pthread_mutex_lock(philo->l_fork);
+		print_msg(info, philo->id, "has taken a fork");
+		pthread_mutex_unlock(philo->l_fork);
+		return (1);
+	}
+	pthread_mutex_lock(philo->l_fork);
+	print_msg(info, philo->id, "has taken a fork");
+	pthread_mutex_lock(philo->r_fork);
+	print_msg(info, philo->id, "has taken a fork");
+	return (0);
+}
+
 int	philo_eat(t_philo *philo, t_info *info)
 {
-	pthread_mutex_lock(philo->l_fork);
-	if (print_msg(info, philo->id, "has taken a fork"))
-		return (1);
-	if (info->num > 1)
+	if (stop(info))
 	{
-		pthread_mutex_lock(philo->r_fork);
-		if (print_msg(info, philo->id, "has taken a fork"))
-			return (1);
-		if (print_msg(info, philo->id, "is eating"))
-			return (1);
-		philo->last_eat = get_time();
-		spend_time(info->eat_t);
-		philo->eat_count++;
+		pthread_mutex_unlock(philo->l_fork);
 		pthread_mutex_unlock(philo->r_fork);
+		return (1);
 	}
+	print_msg(info, philo->id, "is eating");
+	pthread_mutex_lock(&(info->last_eat_m));
+	philo->last_eat = get_time();
+	pthread_mutex_unlock(&(info->last_eat_m));
+	pthread_mutex_lock(&(info->eat_count_m));
+	philo->eat_count++;
+	pthread_mutex_unlock(&(info->eat_count_m));
+	spend_time(info->eat_t);
 	pthread_mutex_unlock(philo->l_fork);
+	pthread_mutex_unlock(philo->r_fork);
 	return (0);
 }
 
 int	philo_sleep(t_philo *philo, t_info *info)
 {
-	if (print_msg(info, philo->id, "is sleeping"))
+	if (stop(info))
 		return (1);
+	print_msg(info, philo->id, "is sleeping");
 	spend_time(info->sleep_t);
-	if (print_msg(info, philo->id, "is thinking"))
+	if (stop(info))
 		return (1);
+	print_msg(info, philo->id, "is thinking");
 	return (0);
 }
 
@@ -53,7 +71,10 @@ void	free_info(t_info *info)
 		pthread_mutex_destroy(&(info->fork[i]));
 		i++;
 	}
-	pthread_mutex_destroy(&(info->print));
+	pthread_mutex_destroy(&(info->print_m));
+	pthread_mutex_destroy(&(info->finish_m));
+	pthread_mutex_destroy(&(info->last_eat_m));
+	pthread_mutex_destroy(&(info->eat_count_m));
 	free(info->fork);
 	free(info->philo);
 }
