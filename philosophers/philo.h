@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seoklee <seoklee@student.42.kr>            +#+  +:+       +#+        */
+/*   By: seoklee <seoklee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/27 18:17:08 by seoklee           #+#    #+#             */
-/*   Updated: 2023/06/01 21:45:43 by seoklee          ###   ########.fr       */
+/*   Updated: 2023/06/02 14:50:39 by seoklee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,18 +41,20 @@ typedef struct s_info
 	int				must_eat;
 	long long		start_t;
 	int				finish_eat;
-	long long		someone_died;
+	int				someone_died;
 	t_philo			*philo;
 	pthread_mutex_t	*fork;
-	pthread_mutex_t print;
+	pthread_mutex_t	print;
 }	t_info;
 
 int				init_info(t_info *info, int ac, char **av);
 t_philo			*init_philo(t_info *info);
 pthread_mutex_t	*init_fork(int num);
 
-int				ft_threads(t_info *info);
+int				start_threads(t_info *info);
 void			*routine(void *arg);
+void			check_finish(t_info *info);
+int				end_threads(t_info *info);
 
 void			free_info(t_info *info);
 int				philo_eat(t_philo *philo, t_info *info);

@@ -3,14 +3,48 @@
 /*                                                        :::      ::::::::   */
 /*   thread.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seoklee <seoklee@student.42.kr>            +#+  +:+       +#+        */
+/*   By: seoklee <seoklee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 12:14:43 by seoklee           #+#    #+#             */
-/*   Updated: 2023/06/01 21:56:27 by seoklee          ###   ########.fr       */
+/*   Updated: 2023/06/02 14:49:56 by seoklee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+int	end_threads(t_info *info)
+{
+	int	i;
+
+	i = 0;
+	while (i < info->num)
+		if (pthread_join(info->philo[i++].thread, NULL))
+			return (1);
+	return (0);
+}
+
+void	check_finish(t_info *info)
+{
+	t_philo	*philo;
+	int		i;
+
+	philo = info->philo;
+	while (info->finish_eat != info->num)
+	{
+		i = 0;
+		while (i < info->num)
+		{
+			if (get_time() - philo[i].last_eat > info->die_t)
+			{
+				info->someone_died = 1;
+				print_msg(*info, philo[i].id, "died");
+				info->finish_eat = info->num;
+				break ;
+			}
+			i++;
+		}
+	}
+}
 
 void	*routine(void *arg)
 {
@@ -38,7 +72,7 @@ void	*routine(void *arg)
 	return (0);
 }
 
-int	ft_threads(t_info *info)
+int	start_threads(t_info *info)
 {
 	int		i;
 	t_philo	*philo;
@@ -49,30 +83,8 @@ int	ft_threads(t_info *info)
 	{
 		philo[i].last_eat = get_time();
 		if (pthread_create(&philo[i].thread, NULL, routine, &philo[i]))
-			return (0);
+			return (1);
 		i++;
 	}
-	while (1)
-	{
-		if (info->finish_eat == info->num)
-			break ;
-		i = 0;
-		while (i < info->num)
-		{
-			if (get_time() - philo[i].last_eat > info->die_t)
-			{
-				info->someone_died = 1;
-				print_msg(*info, philo[i].id, "died");
-				info->finish_eat = info->num;
-				break ;
-			}
-			i++;
-		}
-	}
-	i = 0;
-	while (i < info->num)
-		if (pthread_join(philo[i++].thread, NULL))
-			return (0);
-	free_info(info);
-	return (1);
+	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seoklee <seoklee@student.42.kr>            +#+  +:+       +#+        */
+/*   By: seoklee <seoklee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 00:04:43 by seoklee           #+#    #+#             */
-/*   Updated: 2023/06/01 21:50:30 by seoklee          ###   ########.fr       */
+/*   Updated: 2023/06/02 14:28:10 by seoklee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void	spend_time(long long time)
 	{
 		now = get_time();
 		if (now - start >= time)
-			break;
+			break ;
 		usleep(100);
 	}
 }
