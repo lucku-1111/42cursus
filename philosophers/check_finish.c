@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_finish.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seoklee <seoklee@student.42.kr>            +#+  +:+       +#+        */
+/*   By: seoklee <seoklee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/02 23:54:43 by seoklee           #+#    #+#             */
-/*   Updated: 2023/06/02 23:56:41 by seoklee          ###   ########.fr       */
+/*   Updated: 2023/06/05 15:47:27 by seoklee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,10 @@ int	check_eat(t_info *info)
 	{
 		pthread_mutex_lock(&(info->eat_count_m));
 		if (philo[i].eat_count < info->must_eat)
-			{
-				pthread_mutex_unlock(&(info->eat_count_m));
-				return (0);
-			}
+		{
+			pthread_mutex_unlock(&(info->eat_count_m));
+			return (0);
+		}
 		pthread_mutex_unlock(&(info->eat_count_m));
 		i++;
 	}
@@ -67,8 +67,8 @@ int	stop(t_info *info)
 
 void	check_finish(t_info *info)
 {
+	t_philo	*philo;
 	int		i;
-	t_philo *philo;
 
 	philo = info->philo;
 	while (!stop(info))

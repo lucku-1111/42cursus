@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seoklee <seoklee@student.42.kr>            +#+  +:+       +#+        */
+/*   By: seoklee <seoklee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/27 18:17:08 by seoklee           #+#    #+#             */
-/*   Updated: 2023/06/03 00:50:30 by seoklee          ###   ########.fr       */
+/*   Updated: 2023/06/05 15:47:59 by seoklee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,8 @@ typedef struct s_info
 	pthread_mutex_t	print_m;
 	pthread_mutex_t	finish_m;
 	pthread_mutex_t	last_eat_m;
-	pthread_mutex_t eat_count_m;
+	pthread_mutex_t	eat_count_m;
 }	t_info;
-
 
 int				init_info(t_info *info, int ac, char **av);
 void			init_philo(t_info *info);

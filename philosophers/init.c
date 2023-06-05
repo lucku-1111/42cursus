@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seoklee <seoklee@student.42.kr>            +#+  +:+       +#+        */
+/*   By: seoklee <seoklee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 00:10:22 by seoklee           #+#    #+#             */
-/*   Updated: 2023/06/03 00:55:34 by seoklee          ###   ########.fr       */
+/*   Updated: 2023/06/05 15:49:52 by seoklee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	init_fork(t_info *info)
 {
-	int				i;
+	int	i;
 
 	i = 0;
 	info->fork = malloc(sizeof(pthread_mutex_t) * info->num);
@@ -33,7 +33,7 @@ void	init_fork(t_info *info)
 
 void	init_philo(t_info *info)
 {
-	int		i;
+	int	i;
 
 	i = 0;
 	info->philo = malloc(sizeof(t_philo) * info->num);
@@ -49,7 +49,8 @@ void	init_philo(t_info *info)
 		info->philo[i].l_fork = &(info->fork[i]);
 		info->philo[i].l_fork_status = &(info->fork_status[i]);
 		info->philo[i].r_fork = &(info->fork[(i + 1) % info->num]);
-		info->philo[i].r_fork_status = &(info->fork_status[(i + 1) % info->num]);
+		info->philo[i].r_fork_status = &(info->fork_status[(i + 1) \
+		% info->num]);
 		info->philo[i++].info = info;
 	}
 }
