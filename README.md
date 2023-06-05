@@ -16,8 +16,13 @@
 	- [x] [push_swap](https://github.com/lucku-1111/42cursus/tree/master/push_swap)
 	- [x] [minitalk](https://github.com/lucku-1111/42cursus/tree/master/minitalk)
 	- [x] [so_long](https://github.com/lucku-1111/42cursus/tree/master/so_long)
-	- [ ] Exam Rank 02
+	- [x] Exam Rank 02
 - ### 3 CIRCLE
 	- [ ] Philosophers
 	- [ ] minishell
-	- [ ] Exam Rank 03
+	- [x] Exam Rank 03
+- ### 4 CIRCLE
+	- [ ] cub3d
+	- [ ] CPP Module
+	- [ ] NetPractice
+	- [ ] Exam Rank 04
