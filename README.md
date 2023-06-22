@@ -19,7 +19,7 @@
 	- [x] Exam Rank 02
 - ### 3 CIRCLE
 	- [ ] Philosophers
-	- [ ] minishell
+	- [ ] [minishell](https://github.com/lucku-1111/42cursus/tree/master/minishell)
 	- [x] Exam Rank 03
 - ### 4 CIRCLE
 	- [ ] cub3d
