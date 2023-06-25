@@ -18,7 +18,7 @@
 	- [x] [so_long](https://github.com/lucku-1111/42cursus/tree/master/so_long)
 	- [x] Exam Rank 02
 - ### 3 CIRCLE
-	- [ ] Philosophers
+	- [x] [Philosophers](https://github.com/lucku-1111/42cursus/tree/master/philosophers)
 	- [ ] [minishell](https://github.com/lucku-1111/42cursus/tree/master/minishell)
 	- [x] Exam Rank 03
 - ### 4 CIRCLE
