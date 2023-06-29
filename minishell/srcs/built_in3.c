@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 17:28:20 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/26 14:28:20 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/29 15:09:16 by seoklee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,14 @@ int ft_set_ev_pwd(char *key, t_lst *ev, t_hash *pwd)
 
 int	echo_option_chk(t_lst *str)
 {
+	while (str != NULL && str->info == F_TO_DEL)
+		str = str->nxt;
 	if (*(char *)str->data != '-' || str->nxt == NULL)
 		return (0);
 	str = str->nxt;
 	while (str != NULL)
 	{
-		if (*(char *)str->data != 'n')
+		if (*(char *)str->data != 'n' && str->info != F_TO_DEL)
 			return (0);
 		str = str->nxt;
 	}

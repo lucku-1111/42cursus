@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 17:28:20 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/26 14:28:20 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/29 15:06:23 by seoklee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,13 +56,13 @@ int	ft_exit(t_lst *argv)
 	int		num;
 
 	num = g_status;
+	printf("exit\n");
 	if (argv != NULL && argv->nxt != NULL)
 	{
 		num = ft_exit_code(argv->nxt->data);
 		if (argv->nxt->nxt != NULL)
 			return (ft_error(F_ERROR_ARG));
 	}
-	printf("exit\n");
 	exit(num);
 }
 
