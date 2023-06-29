@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/07 06:51:22 by hyunghki          #+#    #+#              #
-#    Updated: 2023/06/20 16:59:43 by hyunghki         ###   ########.fr        #
+#    Updated: 2023/06/26 14:06:03 by hyunghki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,8 +28,10 @@ SRCS= $(SRC_DIR)main.c \
 	  $(SRC_DIR)heredoc.c \
 	  $(SRC_DIR)struct_utils.c \
 	  $(SRC_DIR)exe.c \
+	  $(SRC_DIR)exe2.c \
 	  $(SRC_DIR)built_in.c \
 	  $(SRC_DIR)built_in2.c \
+	  $(SRC_DIR)built_in3.c \
 	  $(SRC_DIR)signal.c
 OBJS= $(SRCS:.c=.o)
 
@@ -49,7 +51,7 @@ fclean:
 	rm -f $(NAME)
 
 $(NAME): $(OBJS)
-	$(CC) -o $@ $^ $(LDFLAGS) $(LIBS)
+	$(CC) -o $@ $^ $(LDFLAGS) $(LIBS) $(DEBUG_FLAGS)
 
 %.o: %.c
-	$(CC) $(CFLAGS) -o $@ -c $< $(INCLUDE)
+	$(CC) $(CFLAGS) -o $@ -c $< $(INCLUDE) $(DEBUG_FLAGS)

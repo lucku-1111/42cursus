@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse.c                                            :+:      :+:    :+:   */
+/*   split.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/11 14:38:47 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/18 18:47:27 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/23 18:41:18 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,11 +102,11 @@ int	ft_word_chk(char c, char *meta, int mode)
 	}
 	if (mode == F_WORD)
 	{
-		if (c == '\'' && (quote_flag & F_DEQUOTE) == 0)
+		if (c == '\'' && (quote_flag & F_DQUOTE) == 0)
 			quote_flag ^= F_QUOTE;
 		if (c == '\"' && (quote_flag & F_QUOTE) == 0)
-			quote_flag ^= F_DEQUOTE;
-		if ((quote_flag & (F_QUOTE + F_DEQUOTE)) != 0)
+			quote_flag ^= F_DQUOTE;
+		if ((quote_flag & (F_QUOTE + F_DQUOTE)) != 0)
 			return (quote_flag);
 	}
 	while (*meta)

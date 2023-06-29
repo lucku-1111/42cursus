@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   struct_produce.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 14:44:45 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/18 18:48:09 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/23 18:41:17 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static t_token	*mk_token(t_lst *target, t_lst *ev)
+static t_token	*mk_token(t_lst *target, t_lst *ev, int is_single)
 {
 	t_token	*token;
 
@@ -22,7 +22,7 @@ static t_token	*mk_token(t_lst *target, t_lst *ev)
 	token->fd[1] = 1;
 	if (ft_split(token, target->data, " \t><", 0) != 0)
 		return (ft_node_free(token, F_DATA_TOKEN));
-	if (token->argv == NULL && token->redirection == NULL && target->size != 1)
+	if (token->argv == NULL && token->redirection == NULL && !is_single)
 	{
 		ft_error(F_ERROR_SYNTAX);
 		return (ft_node_free(token, F_DATA_TOKEN));
@@ -30,9 +30,6 @@ static t_token	*mk_token(t_lst *target, t_lst *ev)
 	if (ft_expansion(token->argv, 0, ev) != 0)
 		return (ft_node_free(token, F_DATA_TOKEN));
 	if (ft_expansion(token->redirection, 1, ev) != 0)
-		return (ft_node_free(token, F_DATA_TOKEN));
-	if (token->argv != NULL \
-			&& ft_resplit(token, token->argv, token->argv->size) != 0)
 		return (ft_node_free(token, F_DATA_TOKEN));
 	return (token);
 }
@@ -47,22 +44,22 @@ t_lst	*mk_token_lst(char *line, t_lst *ev)
 	line_lst = NULL;
 	target = NULL;
 	if (*line == '|')
-		return (ft_lst_free(NULL, F_DATA_CHAR, F_ERROR_SYNTAX));
+		return (ft_lst_free(NULL, NULL, F_DATA_CHAR, F_ERROR_SYNTAX));
 	if (ft_split(&line_lst, line, "|", F_PIPE) != 0)
-		return (ft_lst_free(line_lst, F_DATA_CHAR, NULL));
+		return (ft_lst_free(line_lst, NULL, F_DATA_CHAR, NULL));
 	tmp = line_lst;
 	while (tmp != NULL)
 	{
-		token = mk_token(tmp, ev);
+		token = mk_token(tmp, ev, (line_lst->nxt == NULL));
 		if (token == NULL || lst_push(&target, mk_lst(token, 0)) != 0)
 		{
 			ft_node_free(token, F_DATA_TOKEN);
-			ft_lst_free(line_lst, F_DATA_CHAR, NULL);
-			return (ft_lst_free(target, F_DATA_TOKEN, NULL));
+			ft_lst_free(line_lst, NULL, F_DATA_CHAR, NULL);
+			return (ft_lst_free(target, NULL, F_DATA_TOKEN, NULL));
 		}
 		tmp = tmp->nxt;
 	}
-	ft_lst_free(line_lst, F_DATA_CHAR, NULL);
+	ft_lst_free(line_lst, NULL, F_DATA_CHAR, NULL);
 	return (target);
 }
 
@@ -100,7 +97,7 @@ t_lst	*mk_str_lst(char *s)
 		if (data == NULL || lst_push(&target, mk_lst(data, 0)) != 0)
 		{
 			free(data);
-			return (ft_lst_free(target, F_DATA_STRING, NULL));
+			return (ft_lst_free(target, NULL, F_DATA_STRING, NULL));
 		}
 		s++;
 	}

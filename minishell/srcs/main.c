@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 07:05:22 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/21 16:56:55 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/26 14:22:02 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@ static void	*ft_parse(t_lst *ev)
 	t_lst	*tv;
 
 	tv = NULL;
-	line = readline("\033[s\033[95mminishell$\033[0m ");
+	line = readline("\e[95mminishell$\e[0m \e[s");
 	if (line == NULL)
 	{
-		printf("\033[u\033[95mminishell$\033[0m exit\n");
+		printf("\e[u\e[B\e[Aexit\n");
 		exit(0);
 	}
 	if (*line)
@@ -35,8 +35,8 @@ static void	*ft_parse(t_lst *ev)
 			free(line);
 			return (NULL);
 		}
-		g_status = ft_exe(tv, ev, NULL, ft_str_size(tv));
-		ft_lst_free(tv, F_DATA_TOKEN, NULL);
+		g_status = ft_exe(tv, ev, ft_str_size(tv));
+		ft_lst_free(tv, NULL, F_DATA_TOKEN, NULL);
 	}
 	free(line);
 	return (NULL);
@@ -48,12 +48,11 @@ static void	*mk_ev(char **env)
 
 	ev = NULL;
 	if (lst_push(&ev, mk_hash_lst("=$")) != 0)
-		return (ft_lst_free(ev, F_DATA_HASH, F_ERROR_MEM));
-	((t_hash *)ev->data)->env = env;
+		return (ft_lst_free(ev, NULL, F_DATA_HASH, F_ERROR_MEM));
 	while (*env)
 	{
 		if (lst_push(&ev, mk_hash_lst(*env)) != 0)
-			return (ft_lst_free(ev, F_DATA_HASH, F_ERROR_MEM));
+			return (ft_lst_free(ev, NULL, F_DATA_HASH, F_ERROR_MEM));
 		env++;
 	}
 	return (ev);
@@ -61,7 +60,6 @@ static void	*mk_ev(char **env)
 
 int	main(int argc, char **argv, char **env)
 {
-	struct termios	term;
 	t_lst			*ev;
 
 	(void)argv;
@@ -70,14 +68,11 @@ int	main(int argc, char **argv, char **env)
 	ev = mk_ev(env);
 	if (ev == NULL)
 		return (1);
-	tcgetattr(STDIN_FILENO, &term);
-	term.c_lflag &= ~ECHOCTL;
-	tcsetattr(STDIN_FILENO, TCSANOW, &term);
 	while (1)
 	{
-		ft_signal(sigint_handler, SIG_IGN);
+		ft_signal(sigint_handler, SIG_IGN, 0);
 		ft_parse(ev);
 	}
-	ft_lst_free(ev, F_DATA_HASH, NULL);
+	ft_lst_free(ev, NULL, F_DATA_HASH, NULL);
 	return (0);
 }

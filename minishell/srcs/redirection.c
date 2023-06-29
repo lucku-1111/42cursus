@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 14:09:31 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/20 14:37:56 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/23 18:41:20 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	ft_unlink(t_lst *file_name)
 {
 	char	*name;
 
-	name = ft_c_str(file_name, NULL, -1, 0);
+	name = ft_c_str(file_name, NULL, 0, -1);
 	unlink(name);
 	free(name);
 }
@@ -75,27 +75,27 @@ int	ft_pipe(t_lst *tv)
 	return (0);
 }
 
-int	ft_redirection(t_token *token, t_lst *redir)
+int	ft_redirection(t_token *token, t_lst *redir, int is_single)
 {
 	t_file	*data;
-	t_lst	*tmp;
 	char	*file_name;
 
 	while (redir != NULL)
 	{
 		data = redir->data;
-		tmp = data->file_name;
-		while (tmp != NULL)
-		{
-			if (ft_word_chk(*(char *)tmp->data, " \t", F_WORD) == 0)
-				return (ft_error(F_ERROR_AMB));
-			tmp = tmp->nxt;
-		}
-		file_name = ft_c_str(data->file_name, NULL, -1, 1);
+		file_name = ft_c_str(data->file_name, NULL, 0, -1);
 		if (file_name == NULL)
+		{
+			if (!is_single)
+				exit(ft_error(F_ERROR_MEM));
 			return (ft_error(F_ERROR_MEM));
+		}
 		if (ft_open(token, file_name, data->mode) != 0)
+		{
+			if (!is_single)
+				exit(1);
 			return (1);
+		}
 		free(file_name);
 		redir = redir->nxt;
 	}

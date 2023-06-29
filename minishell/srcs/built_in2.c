@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   built_in.c                                         :+:      :+:    :+:   */
+/*   built_in2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 18:39:04 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/21 10:14:19 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/26 14:11:52 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,54 +16,48 @@ static int	ft_chk_validate(char *s, int cmd)
 {
 	int	i;
 
+	if (*s >= '0' && *s <= '9')
+		return (ft_error(F_ERROR_EXPORT));
 	i = 0;
 	while (s[i] && ft_word_chk(s[i], "=", F_CHK) != 0)
 	{
 		if (!(i != 0 && s[i] >= '0' && s[i] <= '9') \
 			&& !(s[i] >= 'a' && s[i] <= 'z') \
 			&& !(s[i] >= 'A' && s[i] <= 'Z') && s[i] != '_')
-		{
-			ft_error(F_ERROR_EXPORT);
-			return (-1);
-		}
+			return (ft_error(F_ERROR_EXPORT));
 		i++;
 	}
 	if (i == 0 || (cmd == 1 && s[i] == '='))
-	{
-		ft_error(F_ERROR_EXPORT);
-		return (-1);
-	}
+		return (ft_error(F_ERROR_EXPORT));
 	if (cmd == 0 && s[i] != '=')
-		return (-1);
+		return (-2);
 	return (i);
 }
 
-static int	ft_chk_key(char *s, t_lst *ev, int cmd)
+int	ft_chk_key(char *s, t_lst *ev, int cmd)
 {
 	int		i;
-	char	tmp;
 	t_lst	*prev;
 
-	if (*s >= '0' && *s <= '9')
-		return (ft_error(F_ERROR_EXPORT));
 	i = ft_chk_validate(s, cmd);
 	if (i < 0)
-		return (1);
-	tmp = s[i];
-	s[i] = '\0';
+		return (i);
+	if (cmd == 0)
+		s[i] = '\0';
 	while (ev != NULL)
 	{
 		if (ft_strcmp(((t_hash *)ev->data)->key, s) == 0)
 		{
 			prev->nxt = ev->nxt;
 			ev->nxt = NULL;
-			ft_lst_free(ev, F_DATA_HASH, NULL);
+			ft_lst_free(ev, NULL, F_DATA_HASH, NULL);
 			break ;
 		}
 		prev = ev;
 		ev = ev->nxt;
 	}
-	s[i] = tmp;
+	if (cmd == 0)
+		s[i] = '=';
 	return (0);
 }
 
@@ -75,7 +69,7 @@ int	ft_export(t_lst *argv, t_lst *ev, int flag)
 		return (0);
 	while (argv != NULL)
 	{
-		tmp = ft_c_str(argv->data, NULL, -1, 1);
+		tmp = ft_c_str(argv->data, NULL, 0, -1);
 		if (tmp == NULL)
 			return (ft_error(F_ERROR_MEM));
 		flag = ft_chk_key(tmp, ev, 0);
@@ -84,6 +78,10 @@ int	ft_export(t_lst *argv, t_lst *ev, int flag)
 			free(tmp);
 			return (ft_error(F_ERROR_MEM));
 		}
+		else if (flag == -2)
+			flag = 0;
+		else if (flag < 0)
+			flag = F_ERROR_BUILTIN;
 		free(tmp);
 		argv = argv->nxt;
 	}
@@ -96,10 +94,12 @@ int	ft_unset(t_lst	*argv, t_lst *ev, int flag)
 
 	while (argv != NULL)
 	{
-		tmp = ft_c_str(argv->data, NULL, -1, 1);
+		tmp = ft_c_str(argv->data, NULL, 0, -1);
 		if (tmp == NULL)
 			return (ft_error(F_ERROR_MEM));
 		flag = ft_chk_key(tmp, ev, 1);
+		if (flag < 0)
+			flag = F_ERROR_BUILTIN;
 		free(tmp);
 		argv = argv->nxt;
 	}

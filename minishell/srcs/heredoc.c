@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 14:17:05 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/21 15:13:45 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/23 18:41:22 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,10 @@ static void	parse_heredoc(int fd, char *del, int mode, t_lst *ev)
 
 	while (1)
 	{
-		ft_signal(heredoc_signal_handler, SIG_IGN);
-		target = readline("\033[34mheredoc>\033[0m ");
+		ft_signal(heredoc_signal_handler, SIG_IGN, 0);
+		target = readline("\e[34mheredoc>\e[0m \e[s");
 		if (target == NULL)
-			printf("\033[A\033[34mheredoc>\033[0m ");
+			printf("\e[u\e[B\e[A");
 		if (target == NULL || ft_strcmp(del, target) == 0)
 			break ;
 		tmp = target;
@@ -68,74 +68,75 @@ static void	parse_heredoc(int fd, char *del, int mode, t_lst *ev)
 	exit(0);
 }
 
-static int	heredoc_parent_wait(int fd, t_lst *file)
+static int	heredoc_parent_wait(int fd, char *file_name)
 {
 	int	flag;
 
-	ft_signal(SIG_IGN, SIG_IGN);
+	ft_signal(SIG_IGN, SIG_IGN, 0);
 	waitpid(-1, &flag, 0);
 	if (flag != 0)
 	{
 		close(fd);
-		ft_unlink(file);
-		ft_lst_free(file, F_DATA_CHAR, NULL);
+		unlink(file_name);
 		g_status = 1;
 		return (1);
 	}
-	ft_signal(sigint_handler, SIG_IGN);
+	ft_signal(sigint_handler, SIG_IGN, 0);
 	return (0);
 }
 
-static t_lst	*create_heredoc(char *del, int mode, int token_num, t_lst *ev)
+static int	open_heredoc(char *file_name, t_file *file, t_lst *ev, char *del)
 {
 	int		fd;
-	t_lst	*file;
-	char	*tmp;
 	pid_t	pid;
 
-	file = ft_itoa(token_num);
-	if (file == NULL)
-		return (ft_lst_free(file, F_DATA_CHAR, F_ERROR_MEM));
-	tmp = ft_c_str(file, NULL, -1, 0);
-	if (tmp == NULL)
-		return (ft_lst_free(file, F_DATA_CHAR, F_ERROR_MEM));
-	fd = open(tmp, O_CREAT | O_RDWR | O_TRUNC, 0644);
-	free(tmp);
-	if (fd < 0)
-		return (ft_lst_free(file, F_DATA_CHAR, F_ERROR_FILE));
-	pid = fork();
-	if (pid < 0)
-		return (ft_lst_free(file, F_DATA_CHAR, F_ERROR_FILE));
-	else if (pid == 0)
-		parse_heredoc(fd, del, mode, ev);
-	else if (heredoc_parent_wait(fd, file) != 0)
-		return (NULL);
-	close(fd);
-	return (file);
-}
-
-int	ft_heredoc(t_file *f, int token_num, t_lst *ev)
-{
-	char	*del;
-	int		mode;
-	t_lst	*tmp;
-
-	tmp = f->file_name;
-	del = ft_c_str(tmp, NULL, -1, 1);
+	del = ft_c_str(file->file_name, NULL, 0, -1);
 	if (del == NULL)
 		return (ft_error(F_ERROR_MEM));
-	mode = 1;
-	while (tmp != NULL)
+	fd = open(file_name, O_CREAT | O_RDWR | O_TRUNC, 0644);
+	if (fd < 0)
 	{
-		if (ft_word_chk(*(char *)tmp->data, "\'\"", F_CHK) == 0)
-			mode = 0;
-		tmp = tmp->nxt;
+		free(del);
+		return (ft_error(F_ERROR_FILE));
 	}
-	tmp = create_heredoc(del, mode, token_num, ev);
+	pid = fork();
+	if (pid < 0)
+	{
+		free(del);
+		return (ft_error(F_ERROR_FILE));
+	}
+	else if (pid == 0)
+		parse_heredoc(fd, del, ((file->mode & F_NO_TRANS) == 0), ev);
 	free(del);
-	if (tmp == NULL)
+	if (heredoc_parent_wait(fd, file_name) != 0)
 		return (1);
-	ft_lst_free(f->file_name, F_DATA_CHAR, NULL);
-	f->file_name = tmp;
+	close(fd);
 	return (0);
+}
+
+int	ft_heredoc(t_file *f, t_lst *ev, char *file_name)
+{
+	int	heredoc_num;
+	int	flag;
+
+	heredoc_num = 0;
+	while (heredoc_num < 2147483647)
+	{
+		file_name = ft_itoa(++heredoc_num);
+		if (file_name == NULL)
+			return (ft_error(F_ERROR_MEM));
+		if (access(file_name, F_OK) != 0)
+			break ;
+		free(file_name);
+	}
+	if (heredoc_num == 2147483647)
+		return (ft_error(F_ERROR_FILE));
+	flag = open_heredoc(file_name, f, ev, NULL);
+	f->mode &= ~F_NO_TRANS;
+	ft_lst_free(f->file_name, NULL, F_DATA_CHAR, NULL);
+	f->file_name = mk_str_lst(file_name);
+	free(file_name);
+	if (f->file_name == NULL)
+		return (ft_error(F_ERROR_MEM));
+	return (flag);
 }

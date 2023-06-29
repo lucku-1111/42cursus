@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/20 16:57:48 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/21 16:54:25 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/26 15:42:49 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,16 +31,31 @@ void	heredoc_signal_handler(int sig)
 	exit(1);
 }
 
-void	child_signal_handler(int sig)
+int	cal_flag(int ret_val)
 {
-	if (sig == SIGINT)
-		write(2, "^C\n", 3);
-	if (sig == SIGQUIT)
-		write(2, "^\\Quit: 3\n", 10);
+	if (ret_val == F_ERROR_BUILTIN)
+		return (1);
+	if (ret_val == 0 || ret_val == 1)
+		return (ret_val);
+	if (WIFEXITED(ret_val))
+		return (WEXITSTATUS(ret_val));
+	if (ret_val == 2)
+		printf("\n");
+	if (ret_val == 3)
+		printf("Quit: %d\n", ret_val);
+	return (ret_val + 128);
 }
 
-void	ft_signal(void (*handler_1)(int), void (*handler_2)(int))
+void	ft_signal(void (*handler_1)(int), void (*handler_2)(int), int flag)
 {
+	struct termios	term;	
+
+	tcgetattr(STDIN_FILENO, &term);
+	if (flag == 1)
+		term.c_lflag |= ECHOCTL;
+	else
+		term.c_lflag &= ~ECHOCTL;
+	tcsetattr(STDIN_FILENO, TCSANOW, &term);
 	signal(SIGINT, handler_1);
 	signal(SIGQUIT, handler_2);
 }

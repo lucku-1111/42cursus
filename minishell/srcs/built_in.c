@@ -1,110 +1,85 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exe.c                                              :+:      :+:    :+:   */
+/*   built_in.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 17:28:20 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/21 12:35:26 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/26 14:28:20 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_cd(t_lst *argv, t_lst *ev, char *tmp, t_lst *pwd)
+extern int	g_status;
+
+int	ft_cd(t_lst *argv, t_lst *ev)
 {
+	char	*tmp;
+	int		flag;
+
 	if (argv == NULL)
 		return (0);
-	tmp = ft_c_str(argv->data, NULL, -1, 1);
+	tmp = ft_c_str(argv->data, NULL, 0, -1);
 	if (tmp == NULL)
 		return (ft_error(F_ERROR_MEM));
-	if (chdir(tmp) != 0)
+	flag = chk_cd_argv(tmp);
+	if (flag != 0)
 	{
 		free(tmp);
-		return (ft_error(F_ERROR_FILE));
+		return (flag > 0);
 	}
-	free(tmp);
-	if (ft_pwd(&pwd) != 0)
+	if (ft_set_ev_pwd("OLDPWD", ev, NULL) != 0)
 		return (1);
-	while (ev != NULL)
-	{
-		if (ft_strcmp(((t_hash *)ev->data)->key, "PWD") == 0)
-		{
-			ft_lst_free(((t_hash *)ev->data)->value, F_DATA_CHAR, NULL);
-			((t_hash *)ev->data)->value = pwd;
-			break ;
-		}
-		ev = ev->nxt;
-	}
+	chdir(tmp);
+	free(tmp);
+	if (ft_set_ev_pwd("PWD", ev, NULL) != 0)
+		return (1);
 	return (0);
 }
 
-int	ft_pwd(t_lst **buf)
+int	ft_pwd(void)
 {
 	char	*tmp;
-	t_lst	*ret;
 
 	tmp = getcwd(NULL, 0);
 	if (tmp == NULL)
 		return (ft_error(F_ERROR_FILE));
-	if (buf != NULL)
-	{
-		ret = mk_str_lst(tmp);
-		free(tmp);
-		if (ret == NULL)
-			return (ft_error(F_ERROR_MEM));
-		(*buf) = ret;
-		return (0);
-	}
 	printf("%s\n", tmp);
 	free(tmp);
 	return (0);
 }
 
-int	ft_exit(t_lst *argv, int i)
+int	ft_exit(t_lst *argv)
 {
-	char	*tmp;
 	int		num;
 
-	num = 0;
+	num = g_status;
 	if (argv != NULL && argv->nxt != NULL)
 	{
+		num = ft_exit_code(argv->nxt->data);
 		if (argv->nxt->nxt != NULL)
 			return (ft_error(F_ERROR_ARG));
-		tmp = ft_c_str(((t_lst *)argv->nxt)->data, NULL, -1, 1);
-		if (tmp == NULL)
-			return (ft_error(F_ERROR_MEM));
-		while (tmp[i])
-		{
-			if (!(tmp[i] >= '0' && tmp[i] <= '9'))
-			{
-				free(tmp);
-				return (ft_error(F_ERROR_EXIT));
-			}
-			num = num * 10 + tmp[i++] - '0';
-		}
-		free(tmp);
 	}
 	printf("exit\n");
 	exit(num);
 }
 
-int	ft_echo(t_lst *argv, char *tmp, int flag)
+int	ft_echo(t_lst *argv)
 {
-	if (argv != NULL)
+	int		option_flag;
+	char	*tmp;
+
+	option_flag = 0;
+	if (argv != NULL && echo_option_chk(argv->data) != 0)
 	{
-		tmp = ft_c_str(argv->data, NULL, -1, 1);
-		if (tmp == NULL)
-			return (ft_error(F_ERROR_MEM));
-		flag = ft_strcmp(tmp, "-n");
-		free(tmp);
-	}
-	if (flag == 0)
 		argv = argv->nxt;
+		option_flag = 1;
+	}
 	while (argv != NULL)
 	{
-		tmp = ft_c_str(argv->data, NULL, -1, 1);
+		tmp = ft_c_str(argv->data, NULL, 0, -1);
 		if (tmp == NULL)
 			return (ft_error(F_ERROR_MEM));
 		printf("%s", tmp);
@@ -113,7 +88,7 @@ int	ft_echo(t_lst *argv, char *tmp, int flag)
 			printf(" ");
 		argv = argv->nxt;
 	}
-	if (flag)
+	if (option_flag == 0)
 		printf("\n");
 	return (0);
 }
@@ -123,16 +98,16 @@ int	ft_built_in_cmd(t_lst *argv, t_lst *ev)
 	char	*cmd;
 	int		flag;
 
-	flag = 2;
-	cmd = ft_c_str(argv->data, NULL, -1, 1);
+	flag = F_STATUS_NO_BUILTIN;
+	cmd = ft_c_str(argv->data, NULL, 0, -1);
 	if (cmd == NULL)
 		flag = ft_error(F_ERROR_MEM);
 	else if (ft_strcmp(cmd, "echo") == 0)
-		flag = ft_echo(argv->nxt, NULL, 1);
+		flag = ft_echo(argv->nxt);
 	else if (ft_strcmp(cmd, "cd") == 0)
-		flag = ft_cd(argv->nxt, ev, NULL, NULL);
+		flag = ft_cd(argv->nxt, ev);
 	else if (ft_strcmp(cmd, "pwd") == 0)
-		flag = ft_pwd(NULL);
+		flag = ft_pwd();
 	else if (ft_strcmp(cmd, "export") == 0)
 		flag = ft_export(argv->nxt, ev, 0);
 	else if (ft_strcmp(cmd, "unset") == 0)
@@ -140,7 +115,7 @@ int	ft_built_in_cmd(t_lst *argv, t_lst *ev)
 	else if (ft_strcmp(cmd, "env") == 0)
 		flag = ft_env(ev->nxt);
 	else if (ft_strcmp(cmd, "exit") == 0)
-		flag = ft_exit(argv, 0);
+		flag = ft_exit(argv);
 	free(cmd);
 	return (flag);
 }
