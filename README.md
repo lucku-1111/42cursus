@@ -19,10 +19,10 @@
 	- [x] Exam Rank 02
 - ### 3 CIRCLE
 	- [x] [Philosophers](https://github.com/lucku-1111/42cursus/tree/master/philosophers)
-	- [ ] [minishell](https://github.com/lucku-1111/42cursus/tree/master/minishell)
+	- [x] [minishell](https://github.com/lucku-1111/42cursus/tree/master/minishell)
 	- [x] Exam Rank 03
 - ### 4 CIRCLE
 	- [ ] cub3d
-	- [ ] CPP Module
+	- [ ] CPP Module (00 ~ 04)
 	- [ ] NetPractice
 	- [ ] Exam Rank 04
