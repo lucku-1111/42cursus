@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seoklee <seoklee@student.42.kr>            +#+  +:+       +#+        */
+/*   By: seoklee <seoklee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/01 21:20:11 by seoklee           #+#    #+#             */
-/*   Updated: 2023/07/09 02:25:29 by seoklee          ###   ########.fr       */
+/*   Updated: 2023/07/10 17:34:49 by seoklee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	main(void)
 	{
 		std::cout << "Enter: ";
 		phone_book.get_input(str);
-		if (std::cin.eof() || str.empty())
+		if (str.empty() || std::cin.eof())
 		{
 			std::cout << "Wrong input. Try again." << std::endl;
 			continue ;
@@ -35,7 +35,6 @@ int	main(void)
 			break ;
 		else
 			std::cout << "Invalid command." << std::endl;
-		std::cin.clear();
 	}
 	return (0);
 }

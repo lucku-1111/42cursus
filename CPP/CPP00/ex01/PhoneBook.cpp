@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   phonebook.cpp                                      :+:      :+:    :+:   */
+/*   PhoneBook.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seoklee <seoklee@student.42.kr>            +#+  +:+       +#+        */
+/*   By: seoklee <seoklee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/01 21:30:51 by seoklee           #+#    #+#             */
-/*   Updated: 2023/07/10 16:57:50 by seoklee          ###   ########.fr       */
+/*   Updated: 2023/07/10 19:40:31 by seoklee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,20 +95,14 @@ void	PhoneBook::search(void)
 
 	while (1)
 	{
+		std::stringstream	ss;
+
+		index = 0;
 		std::cout << "Index: ";
-		std::cin >> index;
-		if (std::cin.fail())
-		{
-			std::cin.clear();
-			std::clearerr(stdin);
+		PhoneBook::get_input(str);
+		ss << str;
+		if (!(ss >> index) || ss >> index || str.empty() || std::cin.eof() || index < 0 || index >= count)
 			std::cout << "Wrong input." << std::endl;
-		}
-		else if (index < 0 || index >= count)
-		{
-			std::cin.clear();
-			std::clearerr(stdin);
-			std::cout << "Out of range." << std::endl;
-		}
 		else
 			break ;
 	}

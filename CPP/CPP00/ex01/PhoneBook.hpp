@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   phonebook.hpp                                      :+:      :+:    :+:   */
+/*   PhoneBook.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seoklee <seoklee@student.42.kr>            +#+  +:+       +#+        */
+/*   By: seoklee <seoklee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/01 21:35:30 by seoklee           #+#    #+#             */
-/*   Updated: 2023/07/09 03:46:41 by seoklee          ###   ########.fr       */
+/*   Updated: 2023/07/10 17:21:05 by seoklee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define PHONEBOOK_HPP
 
 # include "Contact.hpp"
+# include <sstream>
 
 class	PhoneBook
 {
