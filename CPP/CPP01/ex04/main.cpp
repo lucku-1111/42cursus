@@ -11,10 +11,16 @@ int main(int argc, char **argv)
 
 	if (argc != 4)
 	{
-		std::cout << "Error: Wrong arguments." << std::endl;
+		std::cout << "Error: There must be four arguments." << std::endl;
 		return (1);
 	}
-
+	s1 = argv[2];
+	s2 = argv[3];
+	if (std::strlen(argv[1]) == 0 || s1.length() == 0)
+	{
+		std::cout << "Error: The argument(filename, s1) must have a length of at least 1." << std::endl;
+		return (1);
+	}
 	ifs.open(argv[1]);
 	if (ifs.fail())
 	{
@@ -29,8 +35,6 @@ int main(int argc, char **argv)
 		return (1);
 	}
 
-	s1 = std::string(argv[2]);
-	s2 = std::string(argv[3]);
 	while (std::getline(ifs, str))
 	{
 		std::string::size_type	pos = str.find(s1);
@@ -39,7 +43,7 @@ int main(int argc, char **argv)
 		{
 			str.erase(pos, s1.length());
 			str.insert(pos, s2);
-			pos = str.find(s1, pos);
+			pos = str.find(s1, pos + s2.length());
 		}
 		ofs << str;
 		if (!ifs.eof())
